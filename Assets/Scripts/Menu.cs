@@ -5,40 +5,38 @@ using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public static MenuMode menuMode { get; set; }
+    public static MenuMode MenuMode { get; set; }
     public static bool IsActive { get; set; }
+
     private Text Title;
+
     void Start()
     {
         Title = GameObject.Find("Title").GetComponent<Text>();
-      //  IsActive = SetActive(false);
+        IsActive = true;
     }
-    private void LateUpdate()
+
+    void LateUpdate()
     {
-        switch (menuMode)
+        switch (MenuMode)
         {
             case MenuMode.Start:
-                Title.text = "Game start";
+                Title.text = "Начало игры";
                 break;
             case MenuMode.Pause:
-                Title.text = "Pause";
+                Title.text = "Пауза";
                 break;
             case MenuMode.GameOver:
-                Title.text = "Game over";
+                Title.text = "Конец игры";
                 break;
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+}
 
-    public enum MenuMode
-    {
-        Start,
-        Pause,
-        GameOver
-    }
+public enum MenuMode
+{
+    Start,
+    Pause,
+    GameOver
+   
 }
