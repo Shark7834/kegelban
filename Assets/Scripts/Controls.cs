@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;   // Text, Image, Button
-using System.IO;   
+using System.IO;
+using UnityEngine.SceneManagement;
 
 public class Controls : MonoBehaviour
 {
@@ -83,7 +84,7 @@ public class Controls : MonoBehaviour
             ballRigidbody.velocity = Vector3.zero;
             ballRigidbody.angularVelocity = Vector3.zero;
             // Собираем информацию о кеглях
-            int kegelsUp = 0;
+            int kegelsUp = -10;
             int kegelsDown = 0;
             foreach (GameObject kegel in
                 GameObject.FindGameObjectsWithTag("Kegel"))
@@ -111,6 +112,17 @@ public class Controls : MonoBehaviour
             attempt++;
             GameStat.text += "\n" + attempt + "  " + Clock.StringValue + "  " +
                 +kegelsDown + "  " + kegelsUp;
+
+            if(kegelsUp == 0)
+            {
+                //// Если сбиты все кегели
+                bestResults.Add(new GameResult { Balls = attempt, Time = Clock.Value });
+                LoadBestResults();
+                GameMenu.SetActive(true);
+                Menu.IsActive = true;
+                Menu.MenuMode = MenuMode.GameOver;
+                SceneManager.LoadScene("SampleScene");
+            }
         }
         #endregion
 
@@ -138,9 +150,9 @@ public class Controls : MonoBehaviour
             Arrow.transform.RotateAround(      // Вращение:
                 ArrowTail.transform.position,  // Центр вращения
                 Vector3.up,                    // Ось вращения
-                -1f                            // Угол поворота
+                -0.3f                            // Угол поворота
             );
-            arrowAngle -= 1f;
+            arrowAngle -= 0.3f;
         }
         if (Input.GetKey(KeyCode.RightArrow)
          && arrowAngle < maxArrowAngle)
@@ -148,9 +160,9 @@ public class Controls : MonoBehaviour
             Arrow.transform.RotateAround(
                 ArrowTail.transform.position,
                 Vector3.up,
-                1f
+                0.3f
             );
-            arrowAngle += 1f;
+            arrowAngle += 0.3f;
         }
         #endregion
 
@@ -193,6 +205,12 @@ public class Controls : MonoBehaviour
         // Debug.Log("Click");
         GameMenu.SetActive(false);
         Menu.IsActive = false;
+    }
+
+    public void RestartClick()
+    {
+        SceneManager.LoadScene("SampleScene");
+       
     }
 
     /**
